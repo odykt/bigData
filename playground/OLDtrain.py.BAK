@@ -1,0 +1,69 @@
+import pandas as pd
+import re
+import nltk
+import contractions
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer, PorterStemmer
+import numpy as np
+from misc import *
+import joblib
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.svm import LinearSVC
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.model_selection import StratifiedKFold
+
+
+dataTrain = joblib.load("data_train.obj")
+
+
+print("\n--- Content Statistics ---")
+print(dataTrain[['text_length', 'word_count', 'sentence_count', 'avg_word_length']].describe())
+
+
+bow_vectorizer = None
+
+
+
+dataTrain_bow = None
+
+bowReady=True
+
+if(not bowReady):
+    bow_vectorizer = CountVectorizer()
+    dataTrain_bow = bow_vectorizer.fit_transform(dataTrain['Content'])
+    joblib.dump(dataTrain_bow,"bow.obj")
+    joblib.dump(bow_vectorizer,"vectorizer.obj")
+else:
+    bow_vectorizer = joblib.load("vectorizer.obj")
+    dataTrain_bow = joblib.load("bow.obj")
+    
+
+X_train = dataTrain_bow
+y_train = dataTrain['Label']
+
+print(X_train.shape)
+print(y_train.shape)
+
+classifier = LinearSVC()#max_iter=20000)
+
+print("Train model")
+classifier.fit(X_train,y_train)
+
+
+
+#######################
+
+dataTest = pd.read_csv("../bigdata2025classification/test.csv")
+X_test = bow_vectorizer.transform(dataTest["Content"])
+y_test = dataTest["Label"]
+
+#######################
+
+y_pred = classifier.predict(X_test)
+
+print(X_test.shape)
+print(y_test.shape)
+print(y_pred.shape)
+print("Accuracy:",accuracy_score(y_test,y_pred))
+print(classification_report(y_test,y_pred))
+print(confusion_matrix(y_test,y_pred))

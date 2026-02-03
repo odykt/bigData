@@ -1,2 +1,14 @@
 bigdata2025classification/
 .venv
+# Python junk
+__pycache__/
+*.pyc
+
+# Large generated artifacts
+*.obj
+*.joblib
+*.pkl
+*.npz
+
+# Optional: generated images
+images/*.png
