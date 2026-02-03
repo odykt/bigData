@@ -62,7 +62,7 @@ for fold, (tr_idx, va_idx) in enumerate(kf.split(X, y), start=1):
     X_tr, X_va = X[tr_idx], X[va_idx]
     y_tr, y_va = y[tr_idx], y[va_idx]
 
-    clf = LinearSVC(C=0.1, max_iter=5000)  #
+    clf = LinearSVC(C=0.1, max_iter=10_000)  #
     clf.fit(X_tr, y_tr)
 
     pred = clf.predict(X_va)
@@ -80,10 +80,48 @@ print(classification_report(all_true, all_pred))
 print("Confusion matrix (aggregated over folds):")
 print(confusion_matrix(all_true, all_pred))
 
+joblib.dump(clf,"clfBaselineBest.obj")
 
-# dataTest = pd.read_csv("../bigdata2025classification/test.csv", sep="|")  # use sep="|" if needed
-# X_test = bow_vectorizer.transform(dataTest["Content"].fillna("").astype(str))
-# test_pred = LinearSVC().fit(X, y).predict(X_test)  # fit once on full train, then predict
-# dataTest["prediction"] = test_pred
-# dataTest.to_csv("test_with_predictions.csv", index=False)
+dataTest = pd.read_csv("../bigdata2025classification/test_without_labels.csv")  # use sep="|" if needed
+X_val = bow_vectorizer.transform(dataTest["Content"].fillna("").astype(str))
+y_val_pred = LinearSVC().fit(X, y).predict(X_val)  # fit once on full train, then predict
+submission = pd.DataFrame({
+    "Id": dataTest["Id"],
+    "Predicted": y_val_pred
+})
+
+# Save exactly as required
+submission.to_csv("testSet_categories.csv", index=False)
+#dataTest.to_csv("test_with_predictions.csv", index=False)
 #
+
+
+#--- Shapes ---
+#X: (111220, 200000)
+#y: (111220,)
+#Fold 1 accuracy: 0.9573
+#Fold 2 accuracy: 0.9603
+#Fold 3 accuracy: 0.9603
+#Fold 4 accuracy: 0.9592
+#Fold 5 accuracy: 0.9591
+#
+#Mean CV accuracy: 0.9592699154828267 +/- 0.0011037576723196601
+#
+#Overall classification report (aggregated over folds):
+#               precision    recall  f1-score   support
+#
+#     Business       0.93      0.93      0.93     24742
+#Entertainment       0.98      0.98      0.98     44527
+#       Health       0.97      0.95      0.96     11953
+#   Technology       0.95      0.95      0.95     29998
+#
+#     accuracy                           0.96    111220
+#    macro avg       0.96      0.95      0.96    111220
+# weighted avg       0.96      0.96      0.96    111220
+#
+#Confusion matrix (aggregated over folds):
+#[[23007   297   189  1249]
+# [  325 43854   100   248]
+# [  272   184 11406    91]
+# [ 1181   334    60 28423]]
+##

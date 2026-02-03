@@ -87,7 +87,14 @@ print(confusion_matrix(all_true, all_pred))
 # dataTest["prediction"] = test_pred
 # dataTest.to_csv("test_with_predictions.csv", index=False)
 #
-#Mean CV accuracy: 0.9544326559971228 +/- 0.0009496670330164335
+
+#Fold 1 accuracy: 0.9548
+#Fold 2 accuracy: 0.9568
+#Fold 3 accuracy: 0.9564
+#Fold 4 accuracy: 0.9552
+#Fold 5 accuracy: 0.9545
+#
+#Mean CV accuracy: 0.9555475633878798 +/- 0.000917541879468379
 #
 #Overall classification report (aggregated over folds):
 #               precision    recall  f1-score   support
@@ -97,13 +104,13 @@ print(confusion_matrix(all_true, all_pred))
 #       Health       0.97      0.96      0.96     11953
 #   Technology       0.94      0.94      0.94     29998
 #
-#     accuracy                           0.95    111220
+#     accuracy                           0.96    111220
 #    macro avg       0.95      0.95      0.95    111220
-# weighted avg       0.95      0.95      0.95    111220
+# weighted avg       0.96      0.96      0.96    111220
 #
 #Confusion matrix (aggregated over folds):
-#[[22816   327   204  1395]
-# [  329 43786   115   297]
-# [  269   161 11424    99]
-# [ 1438   341    93 28126]]
+#[[22814   304   204  1420]
+# [  327 43821   111   268]
+# [  257   143 11452   101]
+# [ 1404   330    75 28189]]
 #
