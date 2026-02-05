@@ -39,7 +39,7 @@ stemmer = PorterStemmer()
 
 print("Stem and lemmatize\n\n")
 for col in ['Title', 'Content']:
-    dataTrain[col] = dataTrain[col].astype(str).apply(clean_text,args=(stop_words,stemmer,lemmatizer,))
+    dataTrain[col] = dataTrain[col].astype(str).apply(clean_text,args=(stop_words,stemmer,lemmatizer,2))
 
 print("get statistics")
 

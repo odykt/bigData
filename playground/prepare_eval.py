@@ -36,7 +36,7 @@ def main() -> None:
             dataTest[col]
             .fillna("")
             .astype(str)
-            .apply(clean_text, args=(stop_words, stemmer, lemmatizer))
+            .apply(clean_text, args=(stop_words, stemmer, lemmatizer,2))
         )
 
     # Optional: basic stats (handy for debugging / parity with train)
