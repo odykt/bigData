@@ -67,20 +67,60 @@ def check_title_content_duplicates(dataTrain):
         return None
 
 
-def clean_text(text, stop_words, stemmer, lemmatizer):
-    # Expand contractions
-    text = contractions.fix(text)
-    # Convert to lowercase
-    text = text.lower()
-    # Remove special characters (keep only letters and spaces)
-    text = re.sub(r'[^a-z\s]', '', text)
-    # Remove extra spaces
-    text = re.sub(r'\s+', ' ', text).strip()
-    # Tokenize
-    words = text.split()
-    # Remove stopwords, lemmatize, and stem
-    words = [stemmer.stem(lemmatizer.lemmatize(word)) for word in words if word not in stop_words]
-    text = ' '.join(words)
-    return text
+#def clean_text(text, stop_words, stemmer, lemmatizer):
+#    # Expand contractions
+#    text = contractions.fix(text)
+#    # Convert to lowercase
+#    text = text.lower()
+#    # Remove special characters (keep only letters and spaces)
+#    text = re.sub(r'[^a-z\s]', '', text)
+#    # Remove extra spaces
+#    text = re.sub(r'\s+', ' ', text).strip()
+#    # Tokenize
+#    words = text.split()
+#    # Remove stopwords, lemmatize, and stem
+#    words = [stemmer.stem(lemmatizer.lemmatize(word)) for word in words if word not in stop_words]
+#    text = ' '.join(words)
+#    return text
+#
 
+def clean_text(text,stop_words,stemmer=None,lemmatizer=None,temperature=3):
+    """
+    temperature:
+        1 -> stopwords only
+        2 -> stopwords + lemmatization
+        3 -> stopwords + lemmatization + stemming
+    """
+
+    if not isinstance(text, str):
+        return ""
+
+    # Expand contractions (don't skip this – it matters)
+    text = contractions.fix(text)
+
+    # Lowercase
+    text = text.lower()
+
+    # Remove non-letter characters
+    text = re.sub(r"[^a-z\s]", " ", text)
+
+    # Tokenize (simple whitespace split)
+    tokens = text.split()
+
+    # Stopword removal (always applied)
+    tokens = [t for t in tokens if t not in stop_words]
+
+    # Lemmatization (temperature >= 2)
+    if temperature >= 2:
+        if lemmatizer is None:
+            raise ValueError("lemmatizer must be provided when temperature >= 2")
+        tokens = [lemmatizer.lemmatize(t) for t in tokens]
+
+    # Stemming (temperature == 3)
+    if temperature >= 3:
+        if stemmer is None:
+            raise ValueError("stemmer must be provided when temperature >= 3")
+        tokens = [stemmer.stem(t) for t in tokens]
+
+    return " ".join(tokens)
 
