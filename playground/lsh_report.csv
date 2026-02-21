@@ -1,0 +1,5 @@
+Type,BuildTime,QueryTime,TotalTime,Fraction,Parameters
+Brute-Force-Jaccard,0.000000,616.605819,616.605819,1.000000,-
+LSH-Jaccard,87.218133,38.788398,126.006531,0.031703,"Perm=16, (b,r)=(2,8), tau(label)=0.9"
+LSH-Jaccard,96.461011,42.449873,138.910885,0.022289,"Perm=32, (b,r)=(2,16), tau(label)=0.9"
+LSH-Jaccard,115.690158,50.565093,166.255251,0.025935,"Perm=64, (b,r)=(4,16), tau(label)=0.9"
