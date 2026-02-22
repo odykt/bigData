@@ -12,3 +12,11 @@ __pycache__/
 
 # Optional: generated images
 images/*.png
+
+# large datasets (do not commit)
+handout/**/Part1/data/train.csv
+handout/**/Part1/data/test_without_labels.csv
+
+# large datasets (do not commit)
+handout/**/Part1/data/train.csv
+handout/**/Part1/data/test_without_labels.csv
